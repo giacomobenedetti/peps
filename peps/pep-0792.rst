@@ -1,0 +1,103 @@
+Title: <REQUIRED: pep title>
+Author: Giacomo Benedetti <giacomo.bndt@gmail.com>, 
+        William Enck <whenck@ncsu.edu>
+Sponsor: <name of sponsor>
+PEP-Delegate: <PEP delegate's name>
+Discussions-To: <REQUIRED: URL of current canonical discussion thread>
+Status: <REQUIRED: Draft | Active | Accepted | Provisional | Deferred | Rejected | Withdrawn | Final | Superseded>
+Type: <REQUIRED: Standards Track | Informational | Process>
+Topic: <Governance | Packaging | Release | Typing>
+Requires: <pep numbers>
+Created: <date created on, in dd-mmm-yyyy format>
+Python-Version: <version number>
+Post-History: <REQUIRED: dates, in dd-mmm-yyyy format, and corresponding links to PEP discussion threads>
+Replaces: <pep number>
+Superseded-By: <pep number>
+Resolution: <url>
+
+Abstract
+========
+
+[A short (~200 word) description of the technical issue being addressed.]
+Python package managers do not fully support reproducible builds. This document describes the problems found in the ecosystem and solutions to address this issue.
+
+
+Motivation
+==========
+
+[Clearly explain why the existing language specification is inadequate to address the problem that the PEP solves.]
+Reproducible builds allow for verifying that a package has not been tampered with. This is important for security, preventing supply chain attacks.
+
+Reproducibility can be affected by different sources: 
+- the build environment
+- the build tools
+- the build dependencies
+
+Package managers (build tools) play a critical role in the reproducibility of builds during the packaging process. They parse the metadata files (pyproject.toml, setup.cfg, etc.) and prepare the build environment by setting up environment variables, eventually producing an archive that can be published as build or source distribution.
+Since the Python ecosystem supports multiple package managers, it is important to define a standard way to ensure reproducible builds.
+At the moment, some package managers are more compliant with reproducible builds than others (e.g, Flit and ...). 
+
+`pip`_ is the default package manager for the Python ecosystem and it interfaces with multiple backends following the `PEP 517`_ specification.
+
+Rationale
+=========
+
+[Describe why particular design decisions were made.]
+
+This document provides recommendations agnostically by the package manager, by reading the findings of research in reproducible builds (paper referral).
+
+However, to provide solution to the identified problems, the `pip`_ package manager is chosen as a target. `pip`_ is the default package manager for the Python ecosystem and it interfaces with multiple backends following the `PEP 517`_ specification. Most of the identified reproducibility issues in Python are caused by archive metadata and other issues related to the packaging process itself. By acting on `pip`_, it is possible to comprehensively tackle most of the issues without dealing with build backends one at a time. 
+This document provides recommendations agnostically by the package manager, by reading the findings of research in reproducible builds (paper referral).
+
+However, to provide solution to the identified problems, the `pip`_ package manager is chosen as a target. `pip`_ is the default package manager for the Python ecosystem and it interfaces with multiple backends following the `PEP 517`_ specification. Most of the identified reproducibility issues in Python are caused by archive metadata and other issues related to the packaging process itself. By acting on `pip`_, it is possible to comprehensively tackle most of the issues without dealing with build backends one at a time. 
+
+
+Make the Packaging Process Reproducible
+====================================
+
+The archive metadata values are the main cause of broken reproducibility of the build. They cause the presence of build-dependent timestamps, file permissions, and locales. The source of these issues is identified in the archiving process inside `pip`_.
+We found that tweaking the archive metadata most of the issues are solved. These changes does not impact on the general implementation of the `pip`_. 
+
+Specification
+=============
+
+Backwards Compatibility
+=======================
+
+[Describe potential impact and severity on pre-existing code.]
+
+
+Security Implications
+=====================
+
+[How could a malicious user take advantage of this new feature?]
+
+
+How to Teach This
+=================
+
+[How to teach users, new and experienced, how to apply the PEP to their work.]
+
+
+Reference Implementation
+========================
+
+[Link to any existing implementation and details about its state, e.g. proof-of-concept.]
+
+
+Rejected Ideas
+==============
+
+[Why certain ideas that were brought while discussing this PEP were not ultimately pursued.]
+
+
+Open Issues
+===========
+
+[Any points that are still being decided/discussed.]
+
+
+Footnotes
+=========
+
+[A collection of footnotes cited in the PEP, and a place to list non-inline hyperlink targets.]
